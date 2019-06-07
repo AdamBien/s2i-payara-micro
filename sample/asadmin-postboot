@@ -1,0 +1,1 @@
+set configs.config.server-config.admin-service.das-config.autodeploy-enabled=false

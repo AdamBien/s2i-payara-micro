@@ -1,0 +1,4 @@
+#!/bin/bash -e
+echo "### Starting Payara 5 with user id: $(id) and group $(id -G)"
+echo "### Starting at $(date)"
+exec ${INSTALL_DIR}/start.sh

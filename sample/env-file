@@ -1,0 +1,7 @@
+MAX_RAM=1024m
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=postgresDB
+DB_HOST=localhost
+DB_PORT=5432
+DS_NAME=PostgresDS

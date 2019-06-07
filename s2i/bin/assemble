@@ -6,6 +6,7 @@ fi
 ASSEMBLY_START=`date +%s`
 SRC=/tmp/src
 PREBOOT_FILE=$SRC/asadmin-preboot
+POSTDEPLOY_FILE=$SRC/asadmin-postdeploy
 POSTBOOT_FILE=$SRC/asadmin-postboot
 printenv
 
@@ -60,10 +61,10 @@ if [ -f $POSTBOOT_FILE ]
 		echo "### No ${POSTBOOT_FILE} found"
 fi
 
-
+echo "java -jar ${INSTALL_DIR}/${PAYARA_JAR} $START_COMMAND" > ${INSTALL_DIR}/start.sh
+chmod a+rwx ${INSTALL_DIR}/start.sh
 find ${INSTALL_DIR} -type d -exec chmod a+rwx {} \;
 find ${INSTALL_DIR} -type f -user 1001 -exec chmod a+rw  {} \;
-export START_COMMAND
 echo "generated command line: ${START_COMMAND}"
 ASSEMBLY_END=`date +%s`
 echo "### assembled at $(date) in $((ASSEMBLY_END-ASSEMBLY_START)) seconds"
