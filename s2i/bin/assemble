@@ -1,0 +1,69 @@
+#!/bin/bash -e
+#
+if [[ "$1" == "-h" ]]; then
+	exec /usr/libexec/s2i/usage
+fi
+ASSEMBLY_START=`date +%s`
+SRC=/tmp/src
+PREBOOT_FILE=$SRC/asadmin-preboot
+POSTBOOT_FILE=$SRC/asadmin-postboot
+printenv
+
+echo "### Installing Thin WARs $(ls $SRC/*.war) into ${DEPLOYMENT_DIR}"
+cp -f ${SRC}/*.war ${DEPLOYMENT_DIR}
+
+START_COMMAND="--deploymentDir ${DEPLOYMENT_DIR}"
+
+if [ -f $SRC/ext/*.jar ]
+	then
+		echo "### Installing JDBC Drivers: $(ls $SRC/ext/*.jar)"
+		cp -f ${SRC}/ext/*.jar ${LIB_DIR} 
+	else
+		echo "### No libraries found in /ext, skipping library installation"
+fi
+
+if [ -f $PREBOOT_FILE ] 
+	then
+		echo "### preboot found: "
+		cat ${PREBOOT_FILE}
+		echo "---------------"
+		START_COMMAND="${START_COMMAND} --prebootcommandfile ${PREBOOT_FILE}"
+		echo "### Start command enhanced ${START_COMMAND}"
+	else
+		echo "### No ${PREBOOT_FILE} found"
+fi
+
+if [ -f $POSTDEPLOY_FILE ] 
+	then
+		echo "### postdeploy found: "
+		cat ${POSTDEPLOY_FILE}
+		echo "---------------"
+		START_COMMAND="${START_COMMAND} --postdeploycommandfile ${POSTDEPLOY_FILE}"
+		echo "### Start command enhanced ${START_COMMAND}"
+
+
+	else
+		echo "### No ${POSTBOOT_FILE} found"
+fi
+
+
+if [ -f $POSTBOOT_FILE ] 
+	then
+		echo "### postboot found: "
+		cat ${POSTBOOT_FILE}
+		echo "---------------"
+		START_COMMAND="${START_COMMAND} --postbootcommandfile ${POSTBOOT_FILE}"
+		echo "### Start command enhanced ${START_COMMAND}"
+
+
+	else
+		echo "### No ${POSTBOOT_FILE} found"
+fi
+
+
+find ${INSTALL_DIR} -type d -exec chmod a+rwx {} \;
+find ${INSTALL_DIR} -type f -user 1001 -exec chmod a+rw  {} \;
+export START_COMMAND
+echo "generated command line: ${START_COMMAND}"
+ASSEMBLY_END=`date +%s`
+echo "### assembled at $(date) in $((ASSEMBLY_END-ASSEMBLY_START)) seconds"
