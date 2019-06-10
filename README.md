@@ -40,6 +40,7 @@ Now build the builder:
 | *.war                  | Yes       | The ThinWar / microservice                                   |
 | ext/*.jar              | No        | JDBC drivers and external libraries                          |
 | asadmin-preboot        | No        | Payara configuration preeboot script                         |
+| asadmin-postdeploy     | No        | Payara configuration postdeploy script                       |
 | asadmin-postboot       | No        | Payara configuration postboot script                         |
 | env-file               | No        | Build-time env-entries                                       |
 
