@@ -10,14 +10,14 @@ POSTDEPLOY_FILE=$SRC/asadmin-postdeploy
 POSTBOOT_FILE=$SRC/asadmin-postboot
 printenv
 
-echo "### Installing Thin WARs $(ls $SRC/*.war) into ${DEPLOYMENT_DIR}"
+echo -e "### Installing Thin WARs $(ls $SRC/*.war) into ${DEPLOYMENT_DIR}\n"
 cp -f ${SRC}/*.war ${DEPLOYMENT_DIR}
 
 START_COMMAND="--deploymentDir ${DEPLOYMENT_DIR}"
 
 if [ -f $SRC/ext/*.jar ]
 	then
-		echo "### Installing JDBC Drivers: $(ls $SRC/ext/*.jar)"
+		echo -e "### Installing JDBC Drivers: $(ls $SRC/ext/*.jar)\n"
 		cp -f ${SRC}/ext/*.jar ${LIB_DIR} 
 	else
 		echo "### No libraries found in /ext, skipping library installation"
@@ -25,24 +25,22 @@ fi
 
 if [ -f $PREBOOT_FILE ] 
 	then
-		echo "### preboot found: "
+		echo -e "### preboot found: \n"
 		cat ${PREBOOT_FILE}
-		echo "---------------"
+		echo -e "\n---------------\n"
 		START_COMMAND="${START_COMMAND} --prebootcommandfile ${PREBOOT_FILE}"
-		echo "### Start command enhanced ${START_COMMAND}"
+		echo -e "### Start command enhanced ${START_COMMAND}\n"
 	else
 		echo "### No ${PREBOOT_FILE} found"
 fi
 
 if [ -f $POSTDEPLOY_FILE ] 
 	then
-		echo "### postdeploy found: "
+		echo -e "### postdeploy found: \n"
 		cat ${POSTDEPLOY_FILE}
-		echo "---------------"
+		echo -e "\n---------------\n"
 		START_COMMAND="${START_COMMAND} --postdeploycommandfile ${POSTDEPLOY_FILE}"
-		echo "### Start command enhanced ${START_COMMAND}"
-
-
+		echo -e "### Start command enhanced ${START_COMMAND}\n"
 	else
 		echo "### No ${POSTBOOT_FILE} found"
 fi
@@ -50,13 +48,11 @@ fi
 
 if [ -f $POSTBOOT_FILE ] 
 	then
-		echo "### postboot found: "
+		echo -e "### postboot found: \n"
 		cat ${POSTBOOT_FILE}
-		echo "---------------"
+		echo -e "\n---------------\n"
 		START_COMMAND="${START_COMMAND} --postbootcommandfile ${POSTBOOT_FILE}"
-		echo "### Start command enhanced ${START_COMMAND}"
-
-
+		echo -e "### Start command enhanced ${START_COMMAND}\n"
 	else
 		echo "### No ${POSTBOOT_FILE} found"
 fi
@@ -65,6 +61,6 @@ echo "java -jar ${INSTALL_DIR}/${PAYARA_JAR} $START_COMMAND" > ${INSTALL_DIR}/st
 chmod a+rwx ${INSTALL_DIR}/start.sh
 find ${INSTALL_DIR} -type d -exec chmod a+rwx {} \;
 find ${INSTALL_DIR} -type f -user 1001 -exec chmod a+rw  {} \;
-echo "generated command line: ${START_COMMAND}"
+echo -e "generated command line: ${START_COMMAND}\n"
 ASSEMBLY_END=`date +%s`
 echo "### assembled at $(date) in $((ASSEMBLY_END-ASSEMBLY_START)) seconds"
